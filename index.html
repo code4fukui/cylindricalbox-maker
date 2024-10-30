@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>cylindaricalbox-maker</title>
+</head><body>
+<h1>cylindaricalbox-maker</h1>
+<div class=main>
+<div>直径</div><input id=inpd value=50><span>mm</span>
+<div>高さ</div><input id=inph value=30><span>mm</span>
+<div>厚さ(側面)</div><input id=inpw value=3><span>mm</span>
+<div>厚さ(底面)</div><input id=inpb value=2><span>mm</span>
+</div><br>
+<button id=btn>OpenSCADコード生成</button><br>
+<textarea id=ta></textarea>
+
+<style>
+.main > *, button, textarea {
+  margin: .3em 0;
+}
+input {
+  font-size: 18px;
+}
+.main {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+#ta {
+  width: 90vw;
+  height: 20em;
+}
+</style>
+<script type="module">
+
+const makeSCAD = (d, h, w, b) => {
+  const template = `d = ${d};
+h = ${h};
+w = ${w};
+b = ${b};
+difference() {
+  r = d / 2;
+  cylinder(h, r, r, $fn=200);
+  translate([0, 0, b]) {
+    cylinder(h + b, r - w, r - w, $fn=200);
+  }
+}
+`;
+  return template;
+};
+
+btn.onclick = () => {
+  const d = inpd.value;
+  const h = inph.value;
+  const w = inpw.value;
+  const b = inpb.value;
+  const res = makeSCAD(d, h, w, b);
+  ta.value = res;
+};
+btn.onclick();
+
+</script>
+
+<hr>
+cylindaricalbox-maker for <a href=https://openscad.org/>OpenSCAD</a><br>
+<a href=https://github.com/code4fukui/cylindricalbox-maker>src on GitHub</a><br>
+
+
+</body>
+</html>
